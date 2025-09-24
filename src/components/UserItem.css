@@ -1,0 +1,10 @@
+img {
+    height: 80px;
+    width: 80px;
+}
+.item-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 0px 16px 16px;
+}
