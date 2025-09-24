@@ -1,4 +1,7 @@
+import type {User} from "../types"
+import UserItem from "./UserItem"
 import { useQuery } from "@tanstack/react-query"
+
 function UserList(){
     const {isLoading, error, data} = useQuery({
         queryKey: ['users'],
@@ -10,7 +13,7 @@ function UserList(){
     if(error) return <span>error</span>
     
     return (
-        <div>{data.map(u => <div key={u.uuid}>{u.first_name}</div>)}</div>
+        <div>{data.map((u: User) => <UserItem key={u.uuid} props={u}/>)}</div>
         
     )
 }
