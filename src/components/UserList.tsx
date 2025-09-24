@@ -1,3 +1,4 @@
+import { useState } from "react"
 import type {User} from "../types"
 import UserItem from "./UserItem"
 import { useQuery } from "@tanstack/react-query"
@@ -9,11 +10,35 @@ function UserList(){
         .then(r => r.json())
         .then(r => r.data),
     })
+    const [filterType, setFilterType] = useState<'first_name' | 'last_name' | 'email'>('first_name')
+    const [filterValue, setFilterValue] = useState<string>('')
+    
+    const filteredData = data.filter((d:User) => d[filterType].toLowerCase().includes(filterValue))
+    
     if(isLoading) return <span>Loading</span>
     if(error) return <span>error</span>
+
+    function handleFilterType(e: React.ChangeEvent<HTMLSelectElement>) {
+        setFilterType(e.target.value as 'first_name' | 'last_name' | 'email')
+    }
+    function handleFilterValue(e: React.ChangeEvent<HTMLInputElement>) {
+        setFilterValue(e.target.value.trim())
+    }
     
     return (
-        <div>{data.map((u: User) => <UserItem key={u.uuid} props={u}/>)}</div>
+        <>
+            <div>
+                <span>Fulter by</span>
+                <select onChange={handleFilterType}>
+                    <option value={'first_name'}>First Name</option>
+                    <option value={'last_name'}>Last Name</option>
+                    <option value={'email'}>Email</option>
+                </select>
+                <input onChange={handleFilterValue}/>
+            </div>
+            <div>{filteredData.map((u: User) => <UserItem key={u.uuid} props={u}/>)}</div>
+
+        </>
         
     )
 }
